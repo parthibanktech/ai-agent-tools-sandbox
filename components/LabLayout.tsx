@@ -48,7 +48,7 @@ export default function LabLayout({ children, currentLab }: LabLayoutProps) {
             </div>
             <div>
               <div className="text-xs font-bold text-white leading-tight">AI Agents Modules</div>
-              <div className="text-xs text-gray-500">Educational Project</div>
+              <div className="text-xs text-gray-500">By Parthiban</div>
             </div>
           </Link>
         </div>
@@ -119,7 +119,7 @@ export default function LabLayout({ children, currentLab }: LabLayoutProps) {
         {/* Footer */}
         <div className="p-4 border-t border-gray-800">
           <div className="text-xs text-gray-600 text-center">
-            Educational Purpose
+            By Parthiban
           </div>
         </div>
       </div>

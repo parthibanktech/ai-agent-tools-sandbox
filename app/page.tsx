@@ -103,7 +103,7 @@ export default function HomePage() {
             </div>
             <div>
               <div className="font-bold text-white text-sm">AI Agents Learning Project</div>
-              <div className="text-xs text-gray-500">Educational Purpose</div>
+              <div className="text-xs text-gray-500">By Parthiban</div>
             </div>
           </div>
           <div className="flex items-center gap-4">
