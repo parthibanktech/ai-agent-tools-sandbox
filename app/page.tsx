@@ -136,7 +136,7 @@ export default function HomePage() {
               think, search, calculate, and reason in real time.
             </p>
             <div className="bg-blue-900/40 border border-blue-500/30 rounded-xl p-4 text-sm text-blue-200">
-              <strong>Educational Note:</strong> This project was built strictly for educational purposes to help you understand every important topic related to AI agents.
+              <strong>Educational Note:</strong> This project was created by Parthiban for educational purposes to help you understand every important topic related to AI agents.
             </div>
           </div>
 
