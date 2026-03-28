@@ -106,7 +106,7 @@ export default function Lab1() {
                 <MessageSquare className="w-4 h-4 text-white" />
               </div>
               <div>
-                <h1 className="font-bold text-white">Lab 1: Chat with an LLM</h1>
+                <h1 className="font-bold text-white">Module 1: Chat with an LLM</h1>
                 <p className="text-xs text-gray-400">Direct conversation with gpt-4o-mini</p>
               </div>
             </div>
@@ -166,11 +166,10 @@ export default function Lab1() {
                     </div>
                   )}
                   <div
-                    className={`max-w-2xl px-4 py-3 rounded-2xl text-sm leading-relaxed ${
-                      msg.role === "user"
+                    className={`max-w-2xl px-4 py-3 rounded-2xl text-sm leading-relaxed ${msg.role === "user"
                         ? "bg-blue-600 text-white"
                         : "bg-gray-800 text-gray-200 border border-gray-700"
-                    }`}
+                      }`}
                   >
                     {msg.content}
                     {msg.role === "assistant" && isStreaming && i === messages.length - 1 && (

@@ -1,26 +1,16 @@
+import { getOpenAIClient } from "../../../lib/openai";
+import { safeEval } from "../../../lib/core_tools/calculator";
 import OpenAI from "openai";
 
-function safeEval(expression: string): number {
-  // Allow only safe math expressions
-  const sanitized = expression.replace(/[^0-9+\-*/().\s%^]/g, "");
-  try {
-    // Simple math eval using Function constructor with restricted scope
-    const result = new Function(`"use strict"; return (${sanitized})`)();
-    if (typeof result !== "number" || !isFinite(result)) throw new Error("Invalid result");
-    return result;
-  } catch {
-    throw new Error(`Cannot evaluate: ${expression}`);
-  }
-}
-
 export async function POST(request: Request) {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey || apiKey === "your-key-here") {
-    return Response.json({ error: "OpenAI API key not configured" }, { status: 500 });
+  let client: OpenAI;
+  try {
+    client = getOpenAIClient();
+  } catch (err) {
+    return Response.json({ error: (err as Error).message }, { status: 500 });
   }
 
   const { question } = await request.json();
-  const client = new OpenAI({ apiKey });
 
   const tools: OpenAI.Chat.ChatCompletionTool[] = [
     {
@@ -78,13 +68,19 @@ export async function POST(request: Request) {
     });
 
     // Execute the tool
-    const result = safeEval(args.expression);
-    steps.push({
-      step: 4,
-      type: "tool_result",
-      content: `Result: ${result.toLocaleString()}`,
-      data: { result },
-    });
+    let result: string | number;
+    try {
+      result = safeEval(args.expression);
+      steps.push({
+        step: 4,
+        type: "tool_result",
+        content: `Result: ${result.toLocaleString()}`,
+        data: { result },
+      });
+    } catch {
+      result = "Error calculating expression";
+      steps.push({ step: 4, type: "tool_result", content: result });
+    }
 
     // Get final answer
     const finalResponse = await client.chat.completions.create({

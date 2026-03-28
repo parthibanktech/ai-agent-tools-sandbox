@@ -166,7 +166,7 @@ export default function Lab8() {
             <div className="w-8 h-8 bg-pink-600 rounded-lg flex items-center justify-center">
               <Network className="w-4 h-4 text-white" />
             </div>
-            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Lab 8</span>
+            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Module 8</span>
           </div>
           <h1 className="text-3xl font-extrabold text-white mb-2">Hello LangGraph</h1>
           <p className="text-gray-400 max-w-2xl">Giving your agent a backbone — state machines, conditional edges, and visual graphs.</p>

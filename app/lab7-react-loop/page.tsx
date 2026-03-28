@@ -244,7 +244,7 @@ export default function Lab7() {
                 <RefreshCw className="w-4 h-4 text-white" />
               </div>
               <div>
-                <h1 className="font-bold text-white">Lab 7: ReAct — The Reasoning Loop</h1>
+                <h1 className="font-bold text-white">Module 7: ReAct — The Reasoning Loop</h1>
                 <p className="text-xs text-gray-400">Thought → Action → Observation, streaming live</p>
               </div>
             </div>

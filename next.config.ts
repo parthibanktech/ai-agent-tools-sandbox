@@ -1,9 +1,12 @@
 import type { NextConfig } from "next";
-import path from "path";
 
 const nextConfig: NextConfig = {
-  turbopack: {
-    root: path.resolve(__dirname),
+  // Workaround: using .next_dev because .next/dev/types got locked by VS Code's TS server.
+  // To revert: delete .next and .next_dev folders, remove this line, restart VS Code.
+  //distDir: ".next_dev",
+  output: "standalone",
+  typescript: {
+    ignoreBuildErrors: false,
   },
 };
 

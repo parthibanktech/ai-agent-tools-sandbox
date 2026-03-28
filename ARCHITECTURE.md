@@ -19,28 +19,6 @@ ReAct is the fundamental loop of agentic behavior. The agent doesn't simply call
 * **Observation:** The actual result of the tool is fed back into the LLM context.
 * *The LLM then starts the loop again until it decides it has the full Final Answer.*
 
-```text
-  [ User ] 
-     │
-     ▼
-  [ Next.js Backend ]  ◄══════════════════════════════════════╗
-     │                                                        ║
-     ├── 1. Send Prompt & History -> [ OpenAI LLM ]           ║
-     │                                  │                     ║
-     │   ┌──────────────────────────────┘                     ║  The 
-     │   ▼                                                    ║  ReAct 
-     ├── 2. LLM responds: "Call Tool (Calculate)"             ║  Loop 
-     │                                                        ║  (repeats)
-     ├── 3. Execute tool locally -> [ Utilities / API ]       ║
-     │                                  │                     ║
-     │   ┌──────────────────────────────┘                     ║
-     │   ▼                                                    ║
-     └── 4. Append tool result to history ════════════════════╝
-     │
-     ▼
-  [ User ] (AI Streams the Final Answer)
-```
-
 ### 4. Graph-based Orchestration / LangGraph (Module 8)
 Advanced agents move beyond simple `while` loops. They organize logic into explicit State Machines (directed cyclic graphs). Nodes represent actions (executing tools, formatting outputs, or hitting the LLM), and conditional edges dynamically route the state based on the LLM's decisions. This is the foundation of robust, production-ready, self-correcting agents.
 

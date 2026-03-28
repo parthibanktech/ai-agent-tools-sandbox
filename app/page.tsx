@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 import {
   MessageSquare,
   Zap,
@@ -103,8 +102,8 @@ export default function HomePage() {
               <Bot className="w-5 h-5 text-white" />
             </div>
             <div>
-              <div className="font-bold text-white text-sm">AI Agents Learning Lab</div>
-              <div className="text-xs text-gray-500">Tech Leaders Hub — Class 7</div>
+              <div className="font-bold text-white text-sm">AI Agents Learning Project</div>
+              <div className="text-xs text-gray-500">Educational Purpose</div>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -117,14 +116,10 @@ export default function HomePage() {
 
       {/* Hero */}
       <section className="max-w-7xl mx-auto px-6 py-16 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out">
           <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-2 text-blue-400 text-sm font-medium mb-6">
             <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-            Class 7 — Interactive Lab Session
+            Interactive Learning Session
           </div>
 
           <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
@@ -134,45 +129,41 @@ export default function HomePage() {
             </span>
           </h1>
 
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-10 leading-relaxed">
-            Journey from a simple chat interface to a full ReAct reasoning loop.
-            Each lab builds on the last — by Lab 7, you&apos;ll watch an AI agent
-            think, search, calculate, and reason in real time.
-          </p>
+          <div className="text-xl text-gray-400 max-w-3xl mx-auto mb-10 leading-relaxed flex flex-col gap-4">
+            <p>
+              Journey from a simple chat interface to a full ReAct reasoning loop.
+              Each module builds on the last — by Module 7, you&apos;ll watch an AI agent
+              think, search, calculate, and reason in real time.
+            </p>
+            <div className="bg-blue-900/40 border border-blue-500/30 rounded-xl p-4 text-sm text-blue-200">
+              <strong>Educational Note:</strong> This project was built strictly for educational purposes to help you understand every important topic related to AI agents.
+            </div>
+          </div>
 
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <Link href="/lab1-chat">
-              <motion.button
-                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-3.5 rounded-xl transition-colors shadow-lg shadow-blue-600/30"
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
+              <button
+                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-3.5 rounded-xl transition-all shadow-lg hover:shadow-blue-600/50 hover:scale-105 active:scale-95"
               >
-                Start Lab 1
+                Start Module 1
                 <ArrowRight className="w-4 h-4" />
-              </motion.button>
+              </button>
             </Link>
             <Link href="/lab7-react-loop">
-              <motion.button
-                className="flex items-center gap-2 bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 font-semibold px-8 py-3.5 rounded-xl transition-colors"
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
+              <button
+                className="flex items-center gap-2 bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 font-semibold px-8 py-3.5 rounded-xl transition-all hover:scale-105 active:scale-95"
               >
-                Jump to ReAct Lab
+                Jump to ReAct Module
                 <ChevronRight className="w-4 h-4" />
-              </motion.button>
+              </button>
             </Link>
           </div>
-        </motion.div>
+        </div>
 
         {/* Stats */}
-        <motion.div
-          className="flex items-center justify-center gap-12 mt-14 pt-10 border-t border-gray-800"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
+        <div className="flex items-center justify-center gap-12 mt-14 pt-10 border-t border-gray-800 animate-in fade-in duration-1000 delay-300 fill-mode-both">
           {[
-            { value: "8", label: "Interactive Labs" },
+            { value: "8", label: "Interactive Modules" },
             { value: "3", label: "AI Tools" },
             { value: "Live", label: "Streaming AI" },
             { value: "ReAct", label: "Pattern Demo" },
@@ -182,7 +173,7 @@ export default function HomePage() {
               <div className="text-sm text-gray-500">{stat.label}</div>
             </div>
           ))}
-        </motion.div>
+        </div>
       </section>
 
       {/* Lab Grid */}
@@ -191,28 +182,24 @@ export default function HomePage() {
           {labs.map((lab, index) => {
             const Icon = lab.icon;
             return (
-              <motion.div
+              <div
                 key={lab.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.07 }}
+                className="animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both"
+                style={{ animationDelay: `${index * 70}ms` }}
               >
                 <Link href={lab.path}>
-                  <motion.div
-                    className="bg-gray-900 border border-gray-800 rounded-2xl p-5 h-full cursor-pointer group relative overflow-hidden"
-                    whileHover={{ y: -4 }}
-                    transition={{ duration: 0.2 }}
+                  <div
+                    className="bg-gray-900 border border-gray-800 rounded-2xl p-5 h-full cursor-pointer group relative overflow-hidden hover:-translate-y-1 transition-transform duration-200"
                   >
                     {/* Lab number */}
                     <div className="flex items-center justify-between mb-4">
                       <span className="text-xs font-bold text-gray-600 bg-gray-800 px-2 py-1 rounded-md">
-                        Lab {lab.id}
+                        Module {lab.id}
                       </span>
-                      <span className={`text-xs font-semibold px-2 py-1 rounded-md ${
-                        lab.star
-                          ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
-                          : "bg-gray-800 text-gray-500"
-                      }`}>
+                      <span className={`text-xs font-semibold px-2 py-1 rounded-md ${lab.star
+                        ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
+                        : "bg-gray-800 text-gray-500"
+                        }`}>
                         {lab.star ? "⭐ " : ""}{lab.badge}
                       </span>
                     </div>
@@ -232,12 +219,12 @@ export default function HomePage() {
 
                     {/* Arrow */}
                     <div className="flex items-center gap-1 text-gray-600 group-hover:text-blue-400 transition-colors mt-4 text-xs font-medium">
-                      Open Lab
+                      Open Module
                       <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                     </div>
-                  </motion.div>
+                  </div>
                 </Link>
-              </motion.div>
+              </div>
             );
           })}
         </div>

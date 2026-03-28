@@ -102,7 +102,7 @@ export default function Lab5() {
               <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
                 <Layers className="w-4 h-4 text-white" />
               </div>
-              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Lab 5</span>
+              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Module 5</span>
             </div>
             {/* Tool use counters */}
             <div className="flex items-center gap-3 text-xs text-gray-400 bg-gray-900 border border-gray-800 rounded-xl px-4 py-2">

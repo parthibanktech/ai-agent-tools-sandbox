@@ -1,87 +1,19 @@
+import { getOpenAIClient } from "../../../lib/openai";
+import { executeTool, TOOLS } from "../../../lib/core_tools";
 import OpenAI from "openai";
 
-function safeEval(expression: string): number {
-  const sanitized = expression.replace(/[^0-9+\-*/().\s%]/g, "");
-  const result = new Function(`"use strict"; return (${sanitized})`)() as number;
-  if (typeof result !== "number" || !isFinite(result)) throw new Error("Invalid");
-  return result;
-}
-
-async function searchWikipedia(query: string): Promise<string> {
-  const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
-  const res = await fetch(url, { headers: { "User-Agent": "AgentLab/1.0" } });
-  if (!res.ok) return `No Wikipedia article found for: ${query}`;
-  const data = await res.json() as { extract?: string; title?: string };
-  return data.extract ? `${data.title}: ${data.extract.substring(0, 600)}` : "No summary available";
-}
-
-async function searchWeb(query: string): Promise<string> {
-  const tavilyKey = process.env.TAVILY_API_KEY;
-  if (!tavilyKey || tavilyKey === "your-key-here") {
-    return `[Web search not configured — Tavily API key missing. If this were configured, I would search for: "${query}"]`;
-  }
-  const res = await fetch("https://api.tavily.com/search", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ api_key: tavilyKey, query, max_results: 3 }),
-  });
-  if (!res.ok) return `Search failed: ${res.statusText}`;
-  const data = await res.json() as { results?: Array<{ content: string }> };
-  const results = data.results?.slice(0, 3).map((r) => r.content).join("\n\n") || "No results";
-  return results.substring(0, 800);
-}
-
-const TOOLS: OpenAI.Chat.ChatCompletionTool[] = [
-  {
-    type: "function",
-    function: {
-      name: "calculator",
-      description: "Evaluates mathematical expressions precisely. Use for any arithmetic or math.",
-      parameters: {
-        type: "object",
-        properties: { expression: { type: "string", description: "The math expression to evaluate" } },
-        required: ["expression"],
-      },
-    },
-  },
-  {
-    type: "function",
-    function: {
-      name: "wikipedia",
-      description: "Fetches information from Wikipedia. Use for facts, history, definitions.",
-      parameters: {
-        type: "object",
-        properties: { query: { type: "string", description: "Topic to look up on Wikipedia" } },
-        required: ["query"],
-      },
-    },
-  },
-  {
-    type: "function",
-    function: {
-      name: "web_search",
-      description: "Searches the web for current events and real-time information.",
-      parameters: {
-        type: "object",
-        properties: { query: { type: "string", description: "The search query" } },
-        required: ["query"],
-      },
-    },
-  },
-];
-
 export async function POST(request: Request) {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey || apiKey === "your-key-here") {
+  let client: OpenAI;
+  try {
+    client = getOpenAIClient();
+  } catch (error) {
     return new Response(
       `data: ${JSON.stringify({ type: "error", content: "OpenAI API key not configured. Add OPENAI_API_KEY to .env.local" })}\n\ndata: ${JSON.stringify({ type: "done" })}\n\n`,
       { headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache" } }
     );
   }
 
-  const { query } = await request.json() as { query: string };
-  const client = new OpenAI({ apiKey });
-
+  const { query } = (await request.json()) as { query: string };
   const encoder = new TextEncoder();
 
   const readable = new ReadableStream({
@@ -133,20 +65,20 @@ export async function POST(request: Request) {
           for (const toolCall of message.tool_calls) {
             if (toolCall.type !== "function") continue;
             const toolName = toolCall.function.name;
-            const toolArgs = JSON.parse(toolCall.function.arguments) as Record<string, string>;
+            let toolArgs: Record<string, string>;
+
+            try {
+              toolArgs = JSON.parse(toolCall.function.arguments) as Record<string, string>;
+            } catch {
+              toolArgs = {};
+            }
 
             send({ type: "action", tool: toolName, input: toolArgs });
 
             let result = "";
             try {
-              if (toolName === "calculator") {
-                const num = safeEval(toolArgs.expression);
-                result = `${num.toLocaleString()}`;
-              } else if (toolName === "wikipedia") {
-                result = await searchWikipedia(toolArgs.query);
-              } else if (toolName === "web_search") {
-                result = await searchWeb(toolArgs.query);
-              }
+              // Execute securely using our mapped tools directory
+              result = await executeTool(toolName, toolArgs);
             } catch (err) {
               result = `Error: ${err instanceof Error ? err.message : "Tool execution failed"}`;
             }

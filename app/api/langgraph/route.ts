@@ -1,11 +1,6 @@
+import { getOpenAIClient } from "../../../lib/openai";
+import { safeEval } from "../../../lib/core_tools/calculator";
 import OpenAI from "openai";
-
-function safeEval(expression: string): number {
-  const sanitized = expression.replace(/[^0-9+\-*/().\s%]/g, "");
-  const result = new Function(`"use strict"; return (${sanitized})`)() as number;
-  if (typeof result !== "number" || !isFinite(result)) throw new Error("Invalid");
-  return result;
-}
 
 const TOOLS: OpenAI.Chat.ChatCompletionTool[] = [
   {
@@ -23,16 +18,17 @@ const TOOLS: OpenAI.Chat.ChatCompletionTool[] = [
 ];
 
 export async function POST(request: Request) {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey || apiKey === "your-key-here") {
+  let client: OpenAI;
+  try {
+    client = getOpenAIClient();
+  } catch (error) {
     return new Response(
-      `data: ${JSON.stringify({ type: "error", content: "API key not configured" })}\n\ndata: ${JSON.stringify({ type: "done" })}\n\n`,
+      `data: ${JSON.stringify({ type: "error", content: (error as Error).message })}\n\ndata: ${JSON.stringify({ type: "done" })}\n\n`,
       { headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache" } }
     );
   }
 
-  const { query } = await request.json() as { query: string };
-  const client = new OpenAI({ apiKey });
+  const { query } = (await request.json()) as { query: string };
   const encoder = new TextEncoder();
 
   const readable = new ReadableStream({
@@ -89,7 +85,14 @@ export async function POST(request: Request) {
 
           for (const toolCall of message.tool_calls) {
             if (toolCall.type !== "function") continue;
-            const toolArgs = JSON.parse(toolCall.function.arguments) as Record<string, string>;
+
+            let toolArgs: Record<string, string>;
+            try {
+              toolArgs = JSON.parse(toolCall.function.arguments) as Record<string, string>;
+            } catch {
+              toolArgs = {};
+            }
+
             send({
               type: "node",
               node: "tools",

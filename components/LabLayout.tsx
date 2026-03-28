@@ -47,8 +47,8 @@ export default function LabLayout({ children, currentLab }: LabLayoutProps) {
               <Bot className="w-4 h-4 text-white" />
             </div>
             <div>
-              <div className="text-xs font-bold text-white leading-tight">AI Agents Lab</div>
-              <div className="text-xs text-gray-500">Class 7: Tool Calling</div>
+              <div className="text-xs font-bold text-white leading-tight">AI Agents Modules</div>
+              <div className="text-xs text-gray-500">Educational Project</div>
             </div>
           </Link>
         </div>
@@ -71,7 +71,7 @@ export default function LabLayout({ children, currentLab }: LabLayoutProps) {
         {/* Labs list */}
         <div className="flex-1 overflow-y-auto p-3 space-y-1">
           <div className="text-xs text-gray-600 uppercase tracking-wider px-3 py-2 font-semibold">
-            Labs
+            Modules
           </div>
           {labs.map((lab) => {
             const Icon = lab.icon;
@@ -100,7 +100,7 @@ export default function LabLayout({ children, currentLab }: LabLayoutProps) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1">
-                      <span className="text-xs text-gray-600">Lab {lab.id}</span>
+                      <span className="text-xs text-gray-600">Module {lab.id}</span>
                       {isActive && <ChevronRight className="w-3 h-3 text-gray-500" />}
                     </div>
                     <div className={`text-xs font-medium truncate ${isActive ? "text-white" : ""}`}>
@@ -119,7 +119,7 @@ export default function LabLayout({ children, currentLab }: LabLayoutProps) {
         {/* Footer */}
         <div className="p-4 border-t border-gray-800">
           <div className="text-xs text-gray-600 text-center">
-            Tech Leaders Hub — Class 7
+            Educational Purpose
           </div>
         </div>
       </div>

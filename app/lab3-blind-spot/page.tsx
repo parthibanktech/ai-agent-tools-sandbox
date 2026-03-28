@@ -178,7 +178,7 @@ export default function Lab3() {
             <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
               <EyeOff className="w-4 h-4 text-white" />
             </div>
-            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Lab 3</span>
+            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Module 3</span>
           </div>
           <h1 className="text-3xl font-extrabold text-white mb-2">The Blind Spot</h1>
           <p className="text-gray-400 max-w-2xl">

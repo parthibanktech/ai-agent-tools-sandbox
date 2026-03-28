@@ -1,14 +1,14 @@
-import OpenAI from "openai";
+import { getOpenAIClient } from "../../../lib/openai";
 
 export async function POST(request: Request) {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey || apiKey === "your-key-here") {
-    return Response.json({ error: "OpenAI API key not configured. Add OPENAI_API_KEY to .env.local" }, { status: 500 });
+  let client;
+  try {
+    client = getOpenAIClient();
+  } catch (error) {
+    return Response.json({ error: (error as Error).message }, { status: 500 });
   }
 
   const { messages } = await request.json();
-
-  const client = new OpenAI({ apiKey });
 
   const stream = await client.chat.completions.create({
     model: "gpt-4o-mini",
